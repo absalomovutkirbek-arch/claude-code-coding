@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(./mvnw compile *)",
+      "Bash(./mvnw -q compile *)",
+      "Bash(./mvnw test *)",
+      "Bash(./mvnw -q test *)",
+      "Bash(./mvnw test-compile *)",
+      "Bash(./mvnw verify *)",
+      "Bash(./mvnw dependency:tree *)",
+      "Bash(./mvnw flyway:info *)",
+      "Bash(./mvnw spotless:apply *)",
+      "Bash(mvn compile *)",
+      "Bash(mvn test *)",
+      "Bash(mvn verify *)",
+      "Bash(./gradlew compileJava *)",
+      "Bash(./gradlew test *)",
+      "Bash(./gradlew check *)",
+      "Bash(./gradlew build *)",
+      "Bash(./gradlew dependencies *)",
+      "Bash(./gradlew spotlessApply *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git ls-files *)"
+    ],
+    "ask": [
+      "Bash(./mvnw spring-boot:run *)",
+      "Bash(./mvnw flyway:migrate *)",
+      "Bash(./mvnw flyway:repair *)",
+      "Bash(./mvnw deploy *)",
+      "Bash(./gradlew bootRun *)",
+      "Bash(./gradlew flywayMigrate *)",
+      "Bash(./gradlew flywayRepair *)",
+      "Bash(./gradlew publish *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(!.env.example)",
+      "Edit(target/**)",
+      "Edit(build/**)",
+      "Bash(./mvnw flyway:clean *)",
+      "Bash(mvn flyway:clean *)",
+      "Bash(./gradlew flywayClean *)",
+      "Bash(git push --force *)",
+      "Bash(git reset --hard *)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-files.sh\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/check-java.sh\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
