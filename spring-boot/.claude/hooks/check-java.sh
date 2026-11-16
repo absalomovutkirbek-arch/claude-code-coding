@@ -21,8 +21,9 @@ case "$path" in
     */src/test/*) exit 0 ;;
 esac
 
+# HOOK_DIFF_BASE lets check-changed.sh compare against another ref, for example origin/main.
 if is_tracked "$path"; then
-    code=$(git -C "$(dirname "$path")" diff -U0 HEAD -- "$(basename "$path")" 2>/dev/null | grep '^+' | grep -v '^+++' | sed 's/^+//')
+    code=$(git -C "$(dirname "$path")" diff -U0 "${HOOK_DIFF_BASE:-HEAD}" -- "$(basename "$path")" 2>/dev/null | grep '^+' | grep -v '^+++' | sed 's/^+//')
 else
     code=$(cat "$path")
 fi

@@ -3,6 +3,7 @@
   "permissions": {
     "allow": [
       "Bash(php -l *)",
+      "Bash(php .claude/hooks/check-changed.php *)",
       "Bash(php yii help *)",
       "Bash(php yii migrate/create *)",
       "Bash(php yii migrate/history *)",

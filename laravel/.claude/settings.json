@@ -3,6 +3,7 @@
   "permissions": {
     "allow": [
       "Bash(php -l *)",
+      "Bash(php .claude/hooks/check-changed.php *)",
       "Bash(php artisan about *)",
       "Bash(php artisan list *)",
       "Bash(php artisan help *)",

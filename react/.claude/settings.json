@@ -3,6 +3,7 @@
   "permissions": {
     "allow": [
       "Bash(npm run typecheck *)",
+      "Bash(node .claude/hooks/check-changed.mjs *)",
       "Bash(npm run lint *)",
       "Bash(npm run test *)",
       "Bash(npm run build *)",
