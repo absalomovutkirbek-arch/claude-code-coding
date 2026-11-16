@@ -36,10 +36,19 @@ common/rules/            Barcha stacklar uchun umumiy qoidalar (9 ta fayl)
     skills/              Slash buyruqlar va tekshirilgan namuna kod
     hooks/               Avtomatik tekshiruvlar
 
+global/skills/setup-stack/  /setup-stack skill (install.sh --global o'rnatadi)
+docs/                    Qo'llanmalar
 install.sh               Setupni loyihaga o'rnatadi
 ```
 
 ## O'rnatish
+
+Har loyihaga qo'lda o'rnatish shart emas. claude.ai Projects, Claude Desktop va terminal uchun to'liq qo'llanma: [docs/claude-code-projects.md](docs/claude-code-projects.md). Qisqasi:
+
+- **claude.ai Projects**: projectga ilova reposi va shu reponi qo'shasiz, qo'llanmadagi tayyor "Project instructions" ni qo'yasiz, chatga "Setupni o'rnat" deysiz. Claude o'zi o'rnatib PR ochadi.
+- **Claude Desktop yoki terminal**: bir marta `./install.sh --global`, keyin har loyihada `/setup-stack`.
+
+Qo'lda o'rnatish:
 
 ```bash
 git clone https://github.com/absalomovutkirbek-arch/claude-code-coding.git
@@ -114,6 +123,8 @@ Ikkita hook Claude har fayl yozganda avtomatik ishlaydi:
 
 - `guard-files` — `.env`, uchinchi tomon kodi (`vendor/`, `node_modules/`), build natijalari va gitga commit qilingan migratsiyalarni tahrirlashni bloklaydi.
 - `check-*` — qatlam qoidalarini nazorat qiladi. Masalan, Action ichida DB so'rovi, Service ichida request yoki `SecurityContextHolder`, React komponentida to'g'ridan-to'g'ri `useQuery` yoki `any` yozilsa, Claude'ga darhol xabar beradi va u tuzatadi. Faqat yangi yozilgan kod tekshiriladi, eski kod tegilmaydi.
+
+claude.ai Projects threadlarida hooklar ishlamaydi. U yerda Claude ishni tugatishdan oldin `check-changed` skriptini ishga tushiradi: u hook bilan bir xil tekshiruvni o'zgargan barcha fayllarga qo'llaydi (`php .claude/hooks/check-changed.php origin/main`, Spring Boot uchun `bash .claude/hooks/check-changed.sh`, React uchun `node .claude/hooks/check-changed.mjs`). Uni CI'da ham ishlatish mumkin.
 
 Talablar: Yii2 va Laravel uchun kompyuterda `php`, Spring Boot uchun `bash` va `git` (JSON uchun `jq` yoki `python3` bo'lsa yaxshi), React uchun `node`. PHP faqat Docker ichida bo'lsa, `.claude/settings.json` dagi `hooks` qismida buyruqni `docker compose exec -T php php ...` ko'rinishiga o'zgartiring yoki hooklarni olib tashlang.
 

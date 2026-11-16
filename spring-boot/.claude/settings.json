@@ -3,6 +3,7 @@
   "permissions": {
     "allow": [
       "Bash(./mvnw compile *)",
+      "Bash(bash .claude/hooks/check-changed.sh *)",
       "Bash(./mvnw -q compile *)",
       "Bash(./mvnw test *)",
       "Bash(./mvnw -q test *)",

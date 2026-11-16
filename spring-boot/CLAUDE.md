@@ -74,6 +74,14 @@ Loaded from `.claude/rules/`:
 
 The tested reference slice is `.claude/skills/new-endpoint/reference/` (module `billing`). Copy its shape.
 
+## Sessions without skills or hooks
+
+Some sessions load this file but not `.claude/skills/`, the path-scoped rule files or the hooks in `.claude/settings.json` (for example cloud threads of a claude.ai project). Check whether the skills above are available to you; when they are not:
+
+- Treat the Skills table as a list of procedures. When a task matches one, or the developer names its command, read `.claude/skills/<name>/SKILL.md` and follow it. `$ARGUMENTS` is the developer's request and `${CLAUDE_SKILL_DIR}` is `.claude/skills/<name>`.
+- Before writing code in a layer, read the matching file in `.claude/rules/spring-boot/` yourself.
+- Before reporting the work as done, run `bash .claude/hooks/check-changed.sh origin/main` (use the branch you started from if it is not `main`) and fix every finding. It applies the same layer checks as the edit hook to everything you changed.
+
 ## Definition of done
 
 - Code is in the right layers and passes `/arch-review`.

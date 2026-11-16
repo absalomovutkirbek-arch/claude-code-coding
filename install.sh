@@ -6,6 +6,11 @@
 #
 #   ./install.sh yii2 ~/projects/my-api
 #
+#   ./install.sh --global
+#     Installs the /setup-stack skill into ~/.claude/skills/ once per computer.
+#     After that, in any project: open Claude Code and run /setup-stack
+#     (the stack is detected from composer.json, pom.xml, build.gradle or package.json).
+#
 # Copies:
 #   common/rules/*           -> <project>/.claude/rules/common/
 #   <stack>/.claude/*        -> <project>/.claude/
@@ -20,6 +25,7 @@ SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 usage() {
     echo "Usage: $0 <stack> <path-to-project> [--force]"
+    echo "       $0 --global    (install the /setup-stack skill into ~/.claude once)"
     echo "Stacks:"
     for dir in "$SOURCE_DIR"/*/; do
         name="$(basename "$dir")"
@@ -29,6 +35,21 @@ usage() {
     done
     exit 1
 }
+
+# Global mode: install the /setup-stack skill for the current user.
+if [[ "${1:-}" == "--global" ]]; then
+    CLAUDE_HOME="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
+    SKILL_DIR="$CLAUDE_HOME/skills/setup-stack"
+    mkdir -p "$SKILL_DIR"
+    # Record where this repository lives so the skill can find it later.
+    escaped_dir=$(printf '%s' "$SOURCE_DIR" | sed 's/[&|\\]/\\&/g')
+    sed "s|__SETUP_REPO__|$escaped_dir|g" "$SOURCE_DIR/global/skills/setup-stack/SKILL.md" > "$SKILL_DIR/SKILL.md"
+    echo "Installed /setup-stack into $SKILL_DIR"
+    echo "It installs setups from: $SOURCE_DIR (keep this folder; 'git pull' here updates every project on its next /setup-stack)"
+    echo
+    echo "Next: open Claude Code in any project and run /setup-stack"
+    exit 0
+fi
 
 [[ $# -ge 2 ]] || usage
 
