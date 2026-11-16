@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(php -l *)",
+      "Bash(php artisan about *)",
+      "Bash(php artisan list *)",
+      "Bash(php artisan help *)",
+      "Bash(php artisan route:list *)",
+      "Bash(php artisan make:migration *)",
+      "Bash(php artisan migrate:status *)",
+      "Bash(php artisan test *)",
+      "Bash(composer validate *)",
+      "Bash(composer dump-autoload *)",
+      "Bash(composer show *)",
+      "Bash(vendor/bin/phpunit *)",
+      "Bash(vendor/bin/pest *)",
+      "Bash(vendor/bin/pint *)",
+      "Bash(vendor/bin/phpstan *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git ls-files *)"
+    ],
+    "ask": [
+      "Bash(php artisan migrate *)",
+      "Bash(php artisan migrate:rollback *)",
+      "Bash(php artisan migrate:refresh *)",
+      "Bash(php artisan db:seed *)",
+      "Bash(php artisan install:api *)",
+      "Bash(php artisan tinker *)",
+      "Bash(composer require *)",
+      "Bash(composer update *)",
+      "Bash(composer remove *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(!.env.example)",
+      "Edit(vendor/**)",
+      "Bash(php artisan migrate:fresh *)",
+      "Bash(php artisan migrate:reset *)",
+      "Bash(php artisan db:wipe *)",
+      "Bash(git push --force *)",
+      "Bash(git reset --hard *)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "php \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-files.php\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "php \"${CLAUDE_PROJECT_DIR}/.claude/hooks/check-php.php\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
